@@ -24,26 +24,36 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            // 認可設定：登録画面とCSSは誰でもアクセス可、他は認証を要求
+            // 認可設定
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/register", "/css/**").permitAll()
-                .anyRequest().authenticated())
-            // ログイン画面の設定：カスタムログインページと成功時の遷移先を指定
+                .requestMatchers("/register", "/css/**", "/h2-console/**").permitAll() // 許可対象をすべてまとめる
+                .anyRequest().authenticated()
+            )
+            // フォームログイン設定
             .formLogin(form -> form
                 .loginPage("/login")
                 .defaultSuccessUrl("/", true)
-                .permitAll())
-            // ログアウト時の遷移先を設定
+                .permitAll()
+            )
+            // ログアウト設定
             .logout(logout -> logout
                 .logoutSuccessUrl("/login?logout")
-                .permitAll());
-        // 設定を反映したSecurityFilterChainを返却
+                .permitAll()
+            )
+            // H2コンソールのためのCSRF無効化
+            .csrf(csrf -> csrf
+                .ignoringRequestMatchers("/h2-console/**")
+            )
+            // H2コンソールのためにiframeを許可
+            .headers(headers -> headers
+                .frameOptions().sameOrigin()
+            );
+
         return http.build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        // パスワードのハッシュ化方式を指定
         return new BCryptPasswordEncoder();
     }
 }

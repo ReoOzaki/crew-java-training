@@ -27,7 +27,7 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	runtimeOnly("org.webjars.npm:bootstrap:5.3.6")
-	runtimeOnly 'org.postgresql:postgresql' // PostgreSQL JDBCドライバ
+    runtimeOnly 'com.h2database:h2'
 }
 
 tasks.named('test') {

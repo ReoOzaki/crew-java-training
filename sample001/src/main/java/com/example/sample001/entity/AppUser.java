@@ -1,11 +1,9 @@
 package com.example.sample001.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "app_user")  // ★ テーブル名を明示
 public class AppUser {
 
     // 主キー（自動生成）
@@ -14,16 +12,19 @@ public class AppUser {
     private Long id;
 
     // ユーザー名
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
     // パスワード（ハッシュ化想定）
+    @Column(name = "password", nullable = false)
     private String password;
 
     // ユーザーのロール（デフォルトは USER）
+    @Column(name = "role", nullable = false)
     private String role = "USER";
 
-    // 以下、getter / setter
-
+    // --- getter / setter ---
+    
     public Long getId() {
         return id;
     }
